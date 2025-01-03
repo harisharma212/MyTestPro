@@ -1,0 +1,235 @@
+To address the issue reported, we need to examine the files mentioned in the traceback message and fix the syntax errors. The error is occurring in the `ui.py` file, specifically at line 6, where there's an incomplete assignment statement for `self.root`. Additionally, there is a missing initialization in `logic.py` and `main.py`.  
+
+Here's the plan to fix the issues:  
+
+1. **Fix the Syntax Error in `ui.py`:**  
+
+   - Initialize `self.root` with the `root` parameter passed to the `CalculatorUI` constructor.  
+
+2. **Initialize the `root` in `main.py`:**  
+
+   - Create a Tkinter root window by initializing `root` with `Tk()`.  
+
+3. **Initialize `self.display` in `logic.py`:**  
+
+   - Properly initialize `self.display` in the `CalculatorLogic` class constructor.  
+
+Let's implement these fixes in the files:  
+
+------------------------ui.py---------------------------  
+
+```python  
+
+import tkinter as tk  
+
+from logic import CalculatorLogic  
+
+class CalculatorUI:  
+
+    def __init__(self, root):  
+
+        self.root = root  # Initialize root with the parameter  
+
+        # Create a display widget for the calculator  
+
+        self.display = tk.Entry(self.root, font=("Arial", 20), bd=10, insertwidth=4, width=14, borderwidth=4)  
+
+        self.display.grid(row=0, column=0, columnspan=4)  
+
+        # Create an instance of the logic handler  
+
+        self.logic = CalculatorLogic(self.display)  
+
+        # Create buttons for the calculator  
+
+        self.create_buttons()  
+
+    def create_buttons(self):  
+
+        buttons = [  
+
+            '7', '8', '9', '/',  
+
+            '4', '5', '6', '*',  
+
+            '1', '2', '3', '-',  
+
+            'C', '0', '=', '+'  
+
+        ]  
+
+        row = 1  
+
+        col = 0  
+
+        for button in buttons:  
+
+            if button == "=":  
+
+                tk.Button(self.root, text=button, padx=20, pady=20, bd=5, font=("Arial", 18),  
+
+                          command=self.logic.calculate).grid(row=row, column=col, columnspan=2, sticky="nsew")  
+
+                col += 2  
+
+            elif button == "C":  
+
+                tk.Button(self.root, text=button, padx=20, pady=20, bd=5, font=("Arial", 18),  
+
+                          command=self.logic.clear_display).grid(row=row, column=col)  
+
+            else:  
+
+                tk.Button(self.root, text=button, padx=20, pady=20, bd=5, font=("Arial", 18),  
+
+                          command=lambda btn=button: self.logic.on_button_click(btn)).grid(row=row, column=col)  
+
+            col += 1  
+
+            if col > 3:  
+
+                col = 0  
+
+                row += 1  
+
+```  
+
+------------------------end_of_ui.py--------------------  
+
+------------------------main.py---------------------------  
+
+```python  
+
+from tkinter import Tk  
+
+from ui import CalculatorUI  
+
+if __name__ == "__main__":  
+
+    root = Tk()  # Initialize the root window  
+
+    root.title("Simple Calculator")  
+
+    root.geometry("400x500")  
+
+    # Create a calculator UI object and pass the root window  
+
+    app = CalculatorUI(root)  
+
+    # Start the main event loop  
+
+    root.mainloop()  
+
+```  
+
+------------------------end_of_main.py--------------------  
+
+------------------------logic.py---------------------------  
+
+```python  
+
+import tkinter as tk  
+
+from tkinter import messagebox  
+
+class CalculatorLogic:  
+
+    def __init__(self, display):  
+
+        self.display = display  # Initialize display with the parameter  
+
+    def on_button_click(self, char):  
+
+        current_text = self.display.get()  
+
+        self.display.delete(0, tk.END)  
+
+        self.display.insert(0, current_text + char)  
+
+    def calculate(self):  
+
+        try:  
+
+            result = str(eval(self.display.get()))  # Evaluate the expression entered  
+
+            self.display.delete(0, tk.END)  
+
+            self.display.insert(0, result)  
+
+        except Exception as e:  
+
+            messagebox.showerror("Error", "Invalid Input")  
+
+    def clear_display(self):  
+
+        self.display.delete(0, tk.END)  
+
+```  
+
+------------------------end_of_logic.py--------------------  
+
+Now, let's save the updated files:  
+
+```  
+
+{  
+
+  "tasks": [  
+
+    {  
+
+      "type": "save_file",  
+
+      "save_file": {  
+
+        "path": "ui.py"  
+
+      }  
+
+    },  
+
+    {  
+
+      "type": "save_file",  
+
+      "save_file": {  
+
+        "path": "main.py"  
+
+      }  
+
+    },  
+
+    {  
+
+      "type": "save_file",  
+
+      "save_file": {  
+
+        "path": "logic.py"  
+
+      }  
+
+    }  
+
+  ]  
+
+}  
+
+```  
+
+These changes should resolve the syntax errors and initialize the necessary components for the calculator application to function properly.  
+
+[Problem Solver]  
+
+[Problem Solver] Is the bug fixed? Press Yes if everything works fine,Press No in case if you need assistance?  
+
+  [yes]: Yes  
+
+  [no]: No  
+
+Input~>>> 
+
+ 
+
+ 
